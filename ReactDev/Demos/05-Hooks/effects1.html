@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Effects - Example 1</title>
+	<style>
+        .gallery {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			position: fixed;
+			width: 100%;
+			left: 4%;
+			-webkit-transform: translateX(-2%);
+			transform: translateX(-2%);
+        }
+		.largeImage {
+			width: 94%;
+		}
+		.smallImage {
+			width: 10%; 
+			margin-right: 2%;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+
+		function Gallery({baseAddress, urls}) {
+
+			const [selectedUrl, setSelectedUrl] = React.useState(undefined)
+
+			React.useEffect(() => {
+				console.log('Gallery effect 1.')
+			})
+	
+			React.useEffect(() => {
+				console.log('Gallery effect 2.')
+			})
+		
+			const mainContent = selectedUrl  
+					? <img src={`${baseAddress}/${selectedUrl}`} className='largeImage' /> 
+					: <h2>No image selected</h2>
+
+			return (
+				<div className="gallery">
+					<button onClick={clearGallery}>Clear gallery</button>
+					<div>
+						{urls.map((url, i) =>
+							<img 
+								key={i}
+								src={`${baseAddress}/${url}`}
+								className='smallImage'
+								onClick={() => {
+									console.log(`Thumbnail clicked: ${url} at ${new Date().toString()}`)
+									setSelectedUrl(url)
+								}}
+							/>
+						)}
+					</div>
+					<div>Updated at {new Date().toString()}</div>
+					<div>{mainContent}</div>
+				</div>
+			)
+		}
+		
+		const urls = [
+			'alesund.jpg', 
+			'bronnoysund.jpg',
+			'budapest.jpg',
+			'capetown.jpg', 
+			'cork.jpg',
+			'joburghadeda.jpg',
+			'oslo.jpg',
+			'singapore.jpg'
+		]
+		
+		const root = createRoot(document.getElementById('root'))
+
+        root.render(
+            <Gallery 
+                baseAddress="https://olsensoft.com/thumbnails" 
+                urls={urls} 
+            />
+        )
+
+        function clearGallery() {
+            root.render(
+                <div className="gallery">Gallery cleared</div>
+            )   
+        }
+
+	</script>
+
+</body>
+</html>

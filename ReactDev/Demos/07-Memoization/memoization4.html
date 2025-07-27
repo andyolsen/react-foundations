@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memoization 4</title>
+	<style>
+		body {font-family: Consolas;}
+		.panel {background:#0677bb; color:white; margin-top:10px; padding-left:5px; padding-bottom:5px;}
+	</style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+
+		// A "normal" (not memoized) component, with a portion of child content that *is* memoized.
+		function Panel({title, text}) {
+
+			// Cache a particular piece of content. Note the dependency array is empty...
+			//   - So there's nothing in here that can change.
+			//   - So there's nothing to inhibit caching here.
+			const initialRender = React.useMemo(
+				() => <div>Initial render: {new Date().toString()}</div>, 
+				[]
+			)
+
+			return (
+				<div className="panel">
+					<h2>{title}</h2>
+					<div>Text: {text}</div>
+					{initialRender}
+					<div>Current render: {new Date().toString()}</div>
+				</div>
+			)
+		}
+
+		// A fully memoized component (uses shallow comparison for properties).
+		const MemoizedPanel = React.memo(Panel)
+		
+		// A fully memoized component (uses a custom comparison function).
+		const MemoizedPanelWithCustomComparisonFunction = React.memo(
+			Panel, 
+			(prevProps, nextProps) => prevProps.text.length == nextProps.text.length
+		)
+
+		function App() {
+			const [text, setText] = React.useState('')
+			return (
+				<div>
+					<input value={text} placeholder="Enter text here" onChange={e => setText(e.target.value)} />
+					<Panel title="Normal panel (with memoized initial timestamp)" text={text}/>
+					<MemoizedPanel title="Fully memoized panel" text={text} />
+					<MemoizedPanelWithCustomComparisonFunction title="Fully memoized panel (with custom comparison function)" text={text} />
+				</div>	
+			)
+		}
+		
+		const root = createRoot(document.getElementById('root'))
+		root.render(<App/>)
+
+	</script>
+
+</body>
+</html>

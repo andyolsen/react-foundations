@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memoization 1</title>
+	<style>
+		body {font-family: Consolas;}
+		.panel {background:#0677bb; color:white; margin-top:10px; padding-left:5px; padding-bottom:5px;}
+	</style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+
+		// A "normal" (not memoized) component.
+		function Panel() {
+			return (
+				<div className="panel">
+					<div>Timestamp: {new Date().toString()}</div>
+				</div>
+			)
+		}
+
+		// A memoized component (using technique 1).
+		const MemoizedPanel1 = React.memo(Panel)
+
+		// A memoized component (using technique 2).
+		const MemoizedPanel2 = React.memo( () => 
+			<div className="panel">
+				<div>Timestamp: {new Date().toString()}</div>
+			</div>
+		)
+
+		function App() {
+			const [text, setText] = React.useState('')
+			return (
+				<>
+					<input value={text} placeholder="Enter text here" onChange={e => setText(e.target.value)} />
+					<Panel />
+					<MemoizedPanel1 />
+					<MemoizedPanel2 />
+				</>	
+			)
+		}
+		
+		const root = createRoot(document.getElementById('root'))
+		root.render(<App/>)
+
+	</script>
+
+</body>
+</html>

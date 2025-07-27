@@ -1,0 +1,7 @@
+.panel {
+  font-size: 2em;
+  color: orangered;
+  padding: 5px;
+  width: 50%;
+  aspect-ratio: 16/9;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memoization 3</title>
+	<style>
+		body {font-family: Consolas;}
+		.panel {background:#0677bb; color:white; margin-top:10px; padding-left:5px; padding-bottom:5px;}
+	</style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+
+		// A "normal" (not memoized) component.
+		function Panel({title, text}) {
+			return (
+				<div className="panel">
+					<h2>{title}</h2>
+					<div>Text: {text}</div>
+					<div>Timestamp: {new Date().toString()}</div>
+				</div>
+			)
+		}
+
+		// A memoized component (using default comparison rules for properties).
+		const MemoizedPanel = React.memo(Panel)
+
+		// A memoized component (with a custom comparison function for properties).
+		const MemoizedPanelWithCustomComparisonFunction = React.memo(
+			Panel, 
+			(prevProps, nextProps) => prevProps.text.length == nextProps.text.length
+		)
+
+		function App() {
+			const [text, setText] = React.useState('')
+			return (
+				<>
+					<input value={text} placeholder="Enter text here" onChange={e => setText(e.target.value)} />
+					<Panel title="Normal panel" text={text}/>
+					<MemoizedPanel title="Memoized panel" text={text} />
+					<MemoizedPanelWithCustomComparisonFunction title="Memoized panel with custom comparison function" text={text} />
+				</>	
+			)
+		}
+		
+		const root = createRoot(document.getElementById('root'))
+		root.render(<App/>)
+
+	</script>
+
+</body>
+</html>

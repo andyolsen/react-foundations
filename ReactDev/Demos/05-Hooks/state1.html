@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>State Management - Simple Example</title>
+    <style>
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+    </style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+	
+		function HitCounter() {
+
+			const [myState, setMyState] = React.useState({
+				hitCount: 0,
+				lastUpdated: new Date()			
+			})
+
+			function onClickHandler() { 
+				setMyState({
+					hitCount: myState.hitCount + 1, 
+					lastUpdated: new Date()
+				})
+			}
+
+			return (
+				<>
+					<h1>State Management - Simple Example</h1>
+					<div>
+						<button onClick={onClickHandler}>Click me</button>
+						<p>Hit count:    <b>{myState.hitCount}</b></p>
+						<p>Last updated: <b>{myState.lastUpdated.toLocaleTimeString()}</b></p>
+					</div>
+				</>
+			)
+		}
+		
+		const root = createRoot(document.getElementById('root'))
+		root.render(<HitCounter/>)
+		
+	</script>
+
+</body>
+</html>

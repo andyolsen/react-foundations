@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSX Example 4</title>
+    <style>
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+    </style>
+</head>
+<body>
+
+<div id='root'></div>
+
+<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react",
+        "react-dom/client": "https://esm.sh/react-dom/client"
+    }
+}
+</script>
+
+<script data-type="module" type="text/babel">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+
+    const data = ["Swansea shirt", "Cardiff shirt", "Lamborghini"]
+
+    function ItemsList(props) {
+        return (
+            <div>
+                <h1>{props.heading}</h1>
+                <ul>
+                { 
+                    props.items.map((item, i) => <li key={i}>{item}</li>) 
+                }
+                </ul>
+                <hr/>
+                <small>Page generated at {props.timestamp}</small>
+            </div>
+        )
+    }
+
+    // Alternative implementation of ItemsList, using destructuring.
+    /*
+    function ItemsList({heading, items, timestamp}) {
+        return (
+            <div>
+                <h1>{heading}</h1>
+                <ul>
+                { 
+                    items.map((item, i) => <li key={i}>{item}</li>) 
+                }
+                </ul>
+                <hr/>
+                <small>Page generated at {timestamp}</small>
+            </div>
+        )
+    }
+    */
+
+    const root = createRoot(document.getElementById('root'))
+    
+    root.render(
+        <ItemsList 
+            heading={'JSX Example 4'} 
+            items={data} 
+            timestamp={new Date().toLocaleTimeString()} 
+        />
+    )  
+
+</script>
+
+</body>
+</html>

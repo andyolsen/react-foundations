@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>My Library</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div id='root'></div>
+
+<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react",
+        "react-dom/client": "https://esm.sh/react-dom/client"
+    }
+}
+</script>
+
+<script data-type="module" type="text/babel">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+
+    class Book {
+        constructor(title, author) {
+            this.title = title
+            this.author = author
+        }
+
+        toString() {
+            return `${this.title}, by ${this.author}`
+        }
+    }
+
+    class Film {
+        constructor(name, genre, blurb) {
+            this.name = name
+            this.genre = genre
+            this.blurb = blurb
+        }
+
+        toString() {
+            return `${this.name} [${this.genre}], ${this.blurb}`
+        }
+    }
+
+    const books = [
+        new Book('Millennium', 'Stieg Larsson'),
+        new Book('A Christmas Carol', 'Charles Dickens'),
+        new Book('The Son', 'Jo Nesbo'),
+    ]
+
+    const films = [
+        new Film('Airplane', 'Comedy', 'Classic plane spoof'),
+        new Film('Skyfall', 'Adventure', 'Bond spy yarn'),
+        new Film('Love Actually', 'RomCom', ' Hugh Grant playing Hugh Grant'),
+        new Film('Mission Impossible', 'Adventure', ' Hi-octane stunt fest')
+    ]
+    
+    function Library({books, films, tabularFormat}) {
+        if (tabularFormat) {
+            return (
+                <div>
+                    <h1>My Library</h1>
+                    <h2>Books</h2>
+                    <Table items={books} />
+                    <h2>Films</h2>
+                    <Table items={films} />
+                    <LikePanel />
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <h1>My Library</h1>
+                    <h2>Books</h2>
+                    <ItemsList items={books} ordered={true} />
+                    <h2>Films</h2>
+                    <ItemsList items={films} />       
+                    <LikePanel /> 
+                </div>
+            )
+        }
+    }
+
+    function LikePanel() {
+        const [myState, setMyState] = React.useState({
+            likes: 0,
+        })
+
+        React.useEffect(() => {
+            console.log(`likes count set to ${myState.likes} at ${new Date().toLocaleTimeString()}`)
+        }, [myState.likes])
+
+        function onLike() {
+            setMyState({
+                likes: myState.likes + 1 
+            })
+        }
+
+        function onResetLikes() {
+            setMyState({
+                likes: 0 
+            })
+        }
+
+        return (
+            <div className='likePanel'>
+                <h2>Like My Library</h2>
+                <span>Likes: <b>{myState.likes}</b></span>&nbsp;
+                <button onClick={onLike}>Like</button>
+                <button onClick={onResetLikes}>Reset like count</button>
+            </div>
+        )
+    }
+
+    function ItemsList({items, ordered}) {
+        if (items.length == 0) {
+            return <div>[no items]</div>
+        }
+        else {
+            const ListTag = ordered ? 'ol' : 'ul'
+            return (
+                <ListTag>
+                {
+                    items.map((item, i) => <li key={i}>{item.toString()} </li> )
+                }
+                </ListTag>
+            )
+        }
+    }
+
+    function Table({items}) {
+        if (items.length == 0) {
+            return <div>[no items]</div>
+        }
+        else {
+            return (
+                <table>
+                    <TableHead sampleObject={items[0]} />
+                    <TableBody objects={items} />
+                </table>
+            )
+        }
+    }
+    
+    function TableHead({sampleObject}) {
+        return (
+            <thead>
+                <TableRow data={Object.keys(sampleObject)} head={true} />
+            </thead>
+        )
+    }
+
+    function TableBody({objects}) {
+        return (
+            <tbody>
+            {
+                objects.map((obj, i) => <TableRow key={i} data={Object.values(obj)} />)
+            }
+            </tbody>
+        )
+    }
+
+    function TableRow({data, head}) {
+        const CellTag = head ? 'th' : 'td'
+        return (
+            <tr>
+            {
+                data.map((d, i) => <CellTag key={i}>{d}</CellTag>)
+            }
+            </tr>
+        )
+    }
+
+    function App() {
+        return (
+            <Library 
+                films={films} 
+                books={books} 
+                tabularFormat={true} 
+            />
+        )
+    }
+
+    const root = createRoot(document.getElementById('root'))
+    root.render(<App/>)
+
+</script>
+
+</body>
+</html>

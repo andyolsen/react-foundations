@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello World Example in React</title>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react",
+        "react-dom/client": "https://esm.sh/react-dom/client"
+    }
+}
+</script>
+
+<script type="module">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+
+    const obj = React.createElement(
+        'h1', 
+        {'id': 'my-msg', 'title': 'This is my message'},
+        'Hello React again!'
+    )
+
+    const root = createRoot(document.getElementById('root'))
+    root.render(obj)
+
+</script>
+
+</body>
+</html>
