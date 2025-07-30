@@ -41,10 +41,16 @@
 		const MemoizedPanel = React.memo(Panel)
 		
 		function App() {
+			
 			const [text, setText] = React.useState('')
+			const [clickCount, setClickCount] = React.useState(0)
+			
 			return (
 				<>
-					<input value={text} placeholder="Enter text here" onChange={e => setText(e.target.value)} />
+					<input value={text} placeholder="Enter text here" onChange={(e) => setText(e.target.value)} /> &nbsp;
+
+					<button onClick={() => setClickCount(clickCount + 1)}>Click me [current count is {clickCount}]</button> 
+
 					<Panel title="Normal panel" text={text}/>
 					<MemoizedPanel title="Memoized panel" text={text} />
 				</>	
