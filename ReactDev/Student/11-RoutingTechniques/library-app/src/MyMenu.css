@@ -1,0 +1,23 @@
+.menu {
+    background-color: #1199ff;
+    color: white;
+    padding: 15px 0px;
+    margin-bottom: 1px;
+}
+
+.menu a {
+    background-color: #1199ff;
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.menu a:hover {
+    color: #1199ff;
+    background-color: white;
+    text-decoration: none;
+}
+
+.menu :global a.active {
+    background-color: orange;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rest Client 1</title>
+	<style>
+		body {
+			font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"react": "https://esm.sh/react",
+			"react-dom/client": "https://esm.sh/react-dom/client"
+		}
+	}
+	</script>
+	
+	<script data-type="module" type="text/babel">
+		import React from "react"
+		import { createRoot } from "react-dom/client"
+
+		function MyComponent() {
+
+			const url = 'http://localhost:3000/api/thumbnailUrls'
+
+			function fetchDataV1() {
+
+				console.log('In fetchDataV1, calling REST service...')
+	
+				const promise1 = window.fetch(url)
+				promise1.then(response => 
+				{
+					const promise2 = response.json()
+					promise2.then(data => 
+					{
+						console.log(`Result: ${data}`)
+					})
+				})
+			}
+			
+			async function fetchDataV2() {
+
+				console.log('In fetchDataV2, calling REST service...')
+	
+				const response = await window.fetch(url)
+				const data = await response.json()
+				console.log(`Result: ${data}`)
+			}
+
+			return (
+				<>
+					<h1>REST Client 1</h1>
+					<p>
+						<button onClick={fetchDataV1}>Call REST service [v1]</button> &nbsp;
+						<button onClick={fetchDataV2}>Call REST service [v2]</button>
+					</p>
+					<p>See Console for REST response data</p>
+				</>
+			)
+		}
+		
+		const root = createRoot(document.getElementById('root'))
+		root.render(<MyComponent/>)
+
+	</script>
+
+</body>
+</html>

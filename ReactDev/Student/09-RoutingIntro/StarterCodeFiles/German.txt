@@ -1,0 +1,10 @@
+import { Link } from 'react-router-dom';
+
+export default function French() {
+  return (
+    <>
+      <h1>German test</h1>
+      <Link to="/italian">To Italian test ▶️</Link>
+    </>
+  )
+}

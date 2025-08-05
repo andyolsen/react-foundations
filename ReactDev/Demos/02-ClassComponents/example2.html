@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Example 2 of Creating Class-Based Components</title>
+</head>
+<body>
+
+<div id='root'></div>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react",
+        "react-dom/client": "https://esm.sh/react-dom/client"
+    }
+}
+</script>
+
+<script type="module">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+    
+    class ProductsList extends React.Component {
+        render() {
+            return React.createElement('ul', null,
+                React.createElement('li', null, 'Swansea City shirt'),
+                React.createElement('li', null, 'Cardiff City shirt'),
+                React.createElement('li', null, 'Bugatti Divo'),
+                React.createElement('li', null, '55in OLED HD TV'),
+                React.createElement('li', null, 'Carving skis'),
+                React.createElement('li', null, 'Ski boots')
+            )
+        }
+    }
+
+    class ShopsList extends React.Component {
+        render() {
+            return React.createElement('ul', null,
+                React.createElement('li', null, 'London'),
+                React.createElement('li', null, 'Paris'),
+                React.createElement('li', null, 'NY'),
+                React.createElement('li', null, 'Swansea')
+            )
+        }
+    }
+
+    class App extends React.Component {
+        render() {
+            return React.createElement('div', null,
+                React.createElement('h1', null, 'Catalog'),
+                React.createElement(ProductsList),
+                React.createElement('h1', null, 'Shops'),
+                React.createElement(ShopsList)
+            )
+        }
+    }
+
+    const app = React.createElement(App)
+
+	const root = createRoot(document.getElementById('root'))
+    root.render(app)
+
+</script>
+
+</body>
+</html>

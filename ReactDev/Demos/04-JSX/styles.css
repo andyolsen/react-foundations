@@ -1,0 +1,26 @@
+﻿body {
+    color: #333;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    border-bottom: 1px dashed #cdcdcd;
+    margin: 25px 0px 30px 0px;
+}
+
+fieldset {
+    margin: 30px 10px;
+    padding: 10px;
+    color: white;
+    border: 1px solid #22aaff;
+    background-color: #22aaff;
+}
+
+legend {
+    color: #22aaff;
+    font-size: 20pt;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px dotted #22aaff;
+    background-color: white;
+}

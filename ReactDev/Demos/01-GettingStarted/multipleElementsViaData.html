@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Creating Multiple Elements Via Data</title>
+</head>
+<body>
+
+<div id='root'></div>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react?dev",
+        "react-dom/client": "https://esm.sh/react-dom/client?dev"
+    }
+}
+</script>
+
+<script type="module">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+    
+    const products = [
+        'Swansea City shirt',
+        'Cardiff City shirt',
+        'Bugatti Divo',
+        '55in OLED HD TV',
+        'Carving skis',
+        'Ski boots'
+    ]
+    
+    const shops = [
+        'London',
+        'Paris',
+        'NY',
+        'Swansea'
+    ]
+
+    const prodList = React.createElement(
+        'ul', 
+        null, 
+        products.map((p, i) => React.createElement("li", {key: i}, p))
+    )
+    
+    const shopList = React.createElement(
+        'ul', 
+        null, 
+        shops.map((s, i) => React.createElement("li", {key: i}, s))
+    )
+    
+    const retailer = React.createElement('div', null,
+        React.createElement('h1', null, 'Catalog'),
+        prodList,
+        React.createElement('h1', null, 'Shops'),
+        shopList
+    )
+    
+    const root = createRoot(document.getElementById('root'))
+    root.render(retailer)
+
+</script>
+
+</body>
+</html>

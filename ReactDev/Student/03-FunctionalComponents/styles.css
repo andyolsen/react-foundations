@@ -1,0 +1,28 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+}
+
+table {
+    border: 1px solid steelblue;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid steelblue;
+    padding: 5pt 10pt;
+    text-align: left;
+}
+
+thead {
+    color: white;
+    background-color: steelblue;
+}
+
+th {
+    text-transform: capitalize;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSX Example 5</title>
+	<link rel="stylesheet" href="styles.css">	
+</head>
+<body>
+	<div id='root'></div>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react",
+            "react-dom/client": "https://esm.sh/react-dom/client"
+        }
+    }
+    </script>
+    
+    <script data-type="module" type="text/babel">
+        import React from "react"
+        import { createRoot } from "react-dom/client"
+    
+        const retailersData = [
+            {
+                "retailerName": "Acme Incorporated",
+                "products": [
+                    { "description": "Swansea City Shirt", "price": 53.00, "unitsInStock": 501 },
+                    { "description": "Cardiff City Shirt", "price": 1.99,  "unitsInStock": 29000 },
+                    { "description": "Bugatti Divo", "price": 4000000, "unitsInStock": 5 },
+                    { "description": "55in OLED HDTV", "price": 1500, "unitsInStock": 25 },
+                ],
+                "shops": [
+                    { "city": "London", "country": "UK" },
+                    { "city": "New York", "country": "USA" },
+                    { "city": "Paris", "country": "France" },
+                ]
+            },
+            {
+                "retailerName": "Mountains'R'Us",
+                "products": [
+                    { "description": "Carving skis", "price": 350.00, "unitsInStock": 1000 },
+                    { "description": "Ski boots", "price": 170.50,  "unitsInStock": 700 },
+                ],
+                "shops": [
+                    { "city": "Val d'Isere", "country": "France" },
+                    { "city": "St. Anton", "country": "Austria" },
+                    { "city": "Kitzbuhel", "country": "Austria" },
+                ]
+            },
+        ]
+
+        function Retailer({retailerName, products, shops}) {
+            return (
+                <fieldset>                          
+                    <legend>{retailerName}</legend>
+
+                    <h4>Products</h4>
+                    <ul>
+                    {
+                        products.map((p, i) => <li key={i}> {p.description} </li>)
+                    }
+                    </ul>
+                    
+                    <h4>Shops</h4>
+                    <ul>
+                    {
+                        shops.map((s, i) => <li key={i}> {s.city} </li>)
+                    }
+                    </ul>
+                
+                </fieldset>
+            )
+        }
+
+        function App({title, retailers}) {
+            return (
+                <>
+                    <h1>{title}</h1>
+                    {
+                        retailers.map((r, i) => <Retailer key={i} {...r} />)
+                    }
+                </>
+            )
+        }
+
+        const root = createRoot(document.getElementById('root'))
+    
+        root.render(
+            <App title="Totally Awesome Retailers" retailers={retailersData} />
+        )  
+
+        </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wordPanel {
+  background-color: dodgerblue;
+  color: white;
+  font-size: 2em;
+  padding: 10px;
+  margin-bottom: 1em;
+}
+
+.guessPanel {
+  margin-bottom: 1em;
+}
+
+.resultPanel {
+  background-color: lightgray;
+  color: white;
+  font-size: 2em;
+  padding: 10px;
+  margin-bottom: 1em;
+}
+
+a {
+  background-color: skyblue;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+}

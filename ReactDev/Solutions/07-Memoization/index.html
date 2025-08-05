@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>My Library</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div id='root'></div>
+
+<script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+
+<script type="importmap">
+{
+    "imports": {
+        "react": "https://esm.sh/react",
+        "react-dom/client": "https://esm.sh/react-dom/client"
+    }
+}
+</script>
+
+<script data-type="module" type="text/babel">
+    import React from "react"
+    import { createRoot } from "react-dom/client"
+
+    class Book {
+        constructor(title, author) {
+            this.title = title
+            this.author = author
+        }
+
+        toString() {
+            return `${this.title}, by ${this.author}`
+        }
+    }
+
+    class Film {
+        constructor(name, genre, blurb) {
+            this.name = name
+            this.genre = genre
+            this.blurb = blurb
+        }
+
+        toString() {
+            return `${this.name} [${this.genre}], ${this.blurb}`
+        }
+    }
+
+    const FooterPanel = React.memo(() => 
+        <>
+            <hr/>
+            <small>Page generated at {new Date().toLocaleTimeString()}</small>
+        </>
+    )
+
+    function Library({restBaseUrl, tabularFormat}) {
+
+        const [books, setBooks] = React.useState([])
+        const [films, setFilms] = React.useState([])
+
+        // React effect to fetch books data (only executed once, after first render).
+        React.useEffect(() => {           
+            async function fetchBooks() {
+                try {
+                    const response = await window.fetch(`${restBaseUrl}/books`)
+                    if (!response.ok) {
+                        throw Error(response.statusText)
+                    }
+                    const rawBooksData = await response.json();
+                    setBooks(rawBooksData.map(b => new Book(b.title, b.author)))
+                } catch (error) {
+                    console.log(error)
+                }
+            }           
+            fetchBooks()
+        }, [])
+
+        // React effect to fetch films data (only executed once, after first render).
+        React.useEffect(() => {           
+            async function fetchFilms() {
+                try {
+                    const response = await window.fetch(`${restBaseUrl}/films`)
+                    if (!response.ok) {
+                        throw Error(response.statusText)
+                    }
+                    const rawFilmsData = await response.json();
+                    setFilms(rawFilmsData.map(f => new Film(f.name, f.genre, f.blurb)))
+                } catch (error) {
+                    console.log(error)
+                }
+            }           
+            fetchFilms()
+        }, [])
+
+        // Create a portion of memoized content.
+        const booksHeader = React.useMemo(
+            () => <h2>Books [count {books.length}]</h2>, 
+            [books]
+		)
+
+        // Create another portion of memoized content.
+        const filmsHeader = React.useMemo(
+            () => <h2>Films [count {films.length}]</h2>, 
+            [films]
+		)
+
+        if (tabularFormat) {
+            return (
+                <div>
+                    <h1>My Library</h1>
+                    <h2>{booksHeader}</h2>
+                    <Table items={books} />
+                    <h2>{filmsHeader}</h2>
+                    <Table items={films} />
+                    <LikePanel />
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <h1>My Library</h1>
+                    <h2>Books</h2>
+                    <ItemsList items={books} ordered={true} />
+                    <h2>Films</h2>
+                    <ItemsList items={films} />       
+                    <LikePanel /> 
+                </div>
+            )
+        }
+    }
+
+    function LikePanel() {
+        const [myState, setMyState] = React.useState({
+            likes: 0,
+        })
+
+        React.useEffect(() => {
+            console.log(`likes count set to ${myState.likes} at ${new Date().toLocaleTimeString()}`)
+        }, [myState.likes])
+
+        function onLike() {
+            setMyState({
+                likes: myState.likes + 1 
+            })
+        }
+
+        function onResetLikes() {
+            setMyState({
+                likes: 0 
+            })
+        }
+
+        return (
+            <div className='likePanel'>
+                <h2>Like My Library</h2>
+                <span>Likes: <b>{myState.likes}</b></span>&nbsp;
+                <button onClick={onLike}>Like</button>
+                <button onClick={onResetLikes}>Reset like count</button>
+                <FooterPanel />
+            </div>
+        )
+    }
+
+    function ItemsList({items, ordered}) {
+        if (items.length == 0) {
+            return <div>[no items]</div>
+        }
+        else {
+            const ListTag = ordered ? 'ol' : 'ul'
+            return (
+                <ListTag>
+                {
+                    items.map((item, i) => <li key={i}>{item.toString()} </li> )
+                }
+                </ListTag>
+            )
+        }
+    }
+
+    function Table({items}) {
+        if (items.length == 0) {
+            return <div>[no items]</div>
+        }
+        else {
+            return (
+                <table>
+                    <TableHead sampleObject={items[0]} />
+                    <TableBody objects={items} />
+                </table>
+            )
+        }
+    }
+    
+    function TableHead({sampleObject}) {
+        return (
+            <thead>
+                <TableRow data={Object.keys(sampleObject)} head={true} />
+            </thead>
+        )
+    }
+
+    function TableBody({objects}) {
+        return (
+            <tbody>
+            {
+                objects.map((obj, i) => <TableRow key={i} data={Object.values(obj)} />)
+            }
+            </tbody>
+        )
+    }
+
+    function TableRow({data, head}) {
+        const CellTag = head ? 'th' : 'td'
+        return (
+            <tr>
+            {
+                data.map((d, i) => <CellTag key={i}>{d}</CellTag>)
+            }
+            </tr>
+        )
+    }
+
+    function App() {
+        return (
+            <Library 
+                restBaseUrl='http://localhost:3000/library' 
+                tabularFormat={true} 
+            />
+        )
+    }
+
+    const root = createRoot(document.getElementById('root'))
+    root.render(<App/>)
+
+</script>
+
+</body>
+</html>
